@@ -3,21 +3,28 @@ import RegisterPage from "../pages/registerPage"
 import LoginPage from "../pages/loginPage"
 import SearchAndFilterProductPage from "../pages/searchAndFillterProductPage"
 import ProductPage from "../pages/productPage"
+import dotenv from 'dotenv';
+import { loginLocators } from "../locators/locators"
 
-const email = "TestEmail@test.com";
-const password = "TestPassword";
+dotenv.config();
+
+const email = process.env.EMAIL as string;
+const password = process.env.PASSWORD as string;
+const firstName = process.env.FIRST_NAME as string;
+const lastName = process.env.LAST_NAME as string;
+const phoneNumber = process.env.PHONE_NUMBER as string;
 
 test.describe("E-commerce Website Testing", async () => {
     
     test("Register test", async ({page, baseURL}) => {
         const register = new RegisterPage(page);
         await page.goto(`${baseURL}`)
-        await page.hover("//a[@data-toggle='dropdown']//span[contains(., 'My account')]")
-        await page.click("'Register'")
-        await register.enterFirstName("TestName");
-        await register.enterLastName("TestLastName");
+        await page.hover(loginLocators.myAccountTabLocator)
+        await page.click(loginLocators.registerOptionInTabLocator)
+        await register.enterFirstName(firstName);
+        await register.enterLastName(lastName);
         await register.enterEmail(email);
-        await register.enterTelephone("+12345678912");
+        await register.enterTelephone(phoneNumber);
         await register.enterPassword(password);
         await register.enterPasswordConfirm(password);
         expect(register.isSubscribeCheck()).toBeChecked();
@@ -29,8 +36,8 @@ test.describe("E-commerce Website Testing", async () => {
     test("Login test", async ({page, baseURL}) => {
         const login = new LoginPage(page);
         await page.goto(`${baseURL}`);
-        await page.hover("//a[@data-toggle='dropdown']//span[contains(., 'My account')]");
-        await page.click("'Login'");
+        await page.hover(loginLocators.myAccountTabLocator);
+        await page.click(loginLocators.loginOptionInTabLocator);
         await login.login(email, password);
         expect(await page.title()).toBe("My Account");
     })
@@ -40,8 +47,8 @@ test.describe("E-commerce Website Testing", async () => {
         const searchAndFilter = new SearchAndFilterProductPage(page);
         const selectProduct = new ProductPage(page);
         await page.goto(`${baseURL}`);
-        await page.hover("//a[@data-toggle='dropdown']//span[contains(., 'My account')]");
-        await page.click("'Login'");
+        await page.hover(loginLocators.myAccountTabLocator);
+        await page.click(loginLocators.loginOptionInTabLocator);
         await login.login(email, password);
         await searchAndFilter.shopByCategoryClick();
         await searchAndFilter.selectCategory();

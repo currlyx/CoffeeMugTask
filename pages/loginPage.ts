@@ -1,4 +1,5 @@
 import { Page } from "@playwright/test";
+import { loginLocators } from "../locators/locators";
 
 export default class LoginPage {
 
@@ -10,17 +11,15 @@ export default class LoginPage {
         await this.clickLoginButton();
     }
     async enterEmailToLogin(emailaddress: string) {
-        await this.page.locator("#input-email")
-            .type(emailaddress);
+        await this.page.locator(loginLocators.emailToLoginLocator)
+            .fill(emailaddress);
     }
     async enterLoginPassword(password: string) {
-        await this.page.locator("#input-password")
-            .type(password);
+        await this.page.locator(loginLocators.loginPasswordLocator)
+            .fill(password);
     }
     async clickLoginButton() {
-        await Promise.all([
-            this.page.waitForLoadState("networkidle"),
-            this.page.click("input[value='Login']")
-        ])
+        await this.page.waitForLoadState("networkidle")
+        await this.page.click(loginLocators.loginButtonLocator)
     }
 }

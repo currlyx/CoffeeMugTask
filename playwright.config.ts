@@ -1,9 +1,13 @@
 import { PlaywrightTestConfig } from '@playwright/test';
+import dotenv from 'dotenv';
+
+dotenv.config();
+const URL = process.env.URL as string;
 
 const config: PlaywrightTestConfig = {
   testMatch: ["tests/addToCart.test.ts"],
   use: {
-    baseURL: "https://ecommerce-playground.lambdatest.io/",
+    baseURL: process.env.URL,
     headless: false,
     screenshot: "only-on-failure",
     video: "retain-on-failure"

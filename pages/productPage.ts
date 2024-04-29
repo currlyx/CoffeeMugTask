@@ -1,39 +1,40 @@
 import { expect, Page } from "@playwright/test";
+import { ProductPageLocators } from "../locators/locators";
 
 export default class ProductPage {
 
     constructor(public page: Page) {}
 
     async seeDetailsOfProduct() {
-        await this.page.hover("//div[@class='image']/a", {
+        await this.page.hover(ProductPageLocators.hoverOverElementLocator, {
             strict: false
         })
-        await this.page.locator("(//button[@title='Quick view'])")
+        await this.page.locator(ProductPageLocators.quickViewButtonLocator)
             .nth(0).click()
     }
     async getProductName() {
-        const productName = this.page.locator("div[id='product-quick-view'] h1[class='h4']");
+        const productName = this.page.locator(ProductPageLocators.productNameLocator);
         const textElement = productName.textContent();
         console.log("Name of added item: " + textElement)
         return textElement
     }
     async addtProductToTheCart() {
-        await this.page.locator("//div[contains(@class, 'content-button')]/button[@title='Add to Cart']").click();
+        await this.page.locator(ProductPageLocators.addToCartButtonLocator).click();
     }
     async isItemVisible() {
-        const item = this.page.locator("//a[.='View Cart ']");
+        const item = this.page.locator(ProductPageLocators.viewCartButtonLocator);
         await item.waitFor({state:"visible"})
         return item;
     }
     async goToCart() {
-        await this.page.locator("//a[.='View Cart ']").click();
+        await this.page.locator(ProductPageLocators.viewCartButtonLocator).click();
     }
     async checkButtonForQuantityChange() {
-        const updateQuantityButton = this.page.locator("//a[contains(text(), 'Continue Shopping']")
+        const updateQuantityButton = this.page.locator(ProductPageLocators.continueShoppingButtonLocator)
         expect(updateQuantityButton).toBeDefined();
     }
     async checkProductInCart() {
-        const productInTheCart = this.page.locator("//td[@class='text-left']/a");
+        const productInTheCart = this.page.locator(ProductPageLocators.productInTheCartNameLocator);
         const textElement = productInTheCart.textContent();
         console.log("Name of product in the cart: " + textElement)
         return textElement

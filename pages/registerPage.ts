@@ -1,42 +1,41 @@
 import { Page } from "@playwright/test";
+import { registerLocators } from "../locators/locators";
 
 export default class RegisterPage {
 
     constructor(public page: Page) {}
     async enterFirstName(firstName: string) {
-        await this.page.locator("#input-firstname")
-            .type(firstName);
+        await this.page.locator(registerLocators.firstNameLocator)
+            .fill(firstName);
     }
     async enterLastName(lastName: string) {
-        await this.page.locator("#input-lastname")
-            .type(lastName);
+        await this.page.locator(registerLocators.lastNameLocator)
+            .fill(lastName);
     }
     async enterEmail(email: string) {
-        await this.page.locator("#input-email")
-            .type(email);
+        await this.page.locator(registerLocators.emailToRegisterLocator)
+            .fill(email);
     }
     async enterTelephone(telephoneNumber: string) {
-        await this.page.locator("#input-telephone")
-            .type(telephoneNumber);
+        await this.page.locator(registerLocators.phoneNumberLocator)
+            .fill(telephoneNumber);
     }
     async enterPassword(password: string) {
-        await this.page.locator("#input-password")
-            .type(password);
+        await this.page.locator(registerLocators.registerPasswordLocator)
+            .fill(password);
     }
     async enterPasswordConfirm(password: string) {
-        await this.page.locator("#input-confirm")
-            .type(password);
+        await this.page.locator(registerLocators.registerPasswordConfirmLocator)
+            .fill(password);
     }
     isSubscribeCheck() {
-        return this.page.locator("#input-newsletter-no");
+        return this.page.locator(registerLocators.subscribeNoLocator);
     }
     async agreeToPolicy() {
-        await this.page.click("//label[@for='input-agree']")
+        await this.page.click(registerLocators.agreeToPolicyLocator)
     }
     async clickContinueToRegister() {
-        await Promise.all([
-            this.page.waitForLoadState("networkidle"),
-            this.page.click("input[value='Continue']")
-        ])
+        await this.page.waitForLoadState("domcontentloaded")
+        await this.page.click(registerLocators.registerContinueButtonLocator)
     }
 }

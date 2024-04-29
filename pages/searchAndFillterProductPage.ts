@@ -1,27 +1,24 @@
 import { Page, expect } from "@playwright/test";
+import { searchAndFillterProductPageLocators } from "../locators/locators";
 
 export default class SearchAndFilterProductPage {
 
     constructor(public page: Page) {}
     async shopByCategoryClick() {
-        await this.page.getByRole('button', { name: 'Shop by Category' }).click();
+        await this.page.locator(searchAndFillterProductPageLocators.shopByCategoryLocator).click();
     }
     async selectCategory() {
-        await this.page.locator("//span[contains(text(),' Software')]").click();
+        await this.page.locator(searchAndFillterProductPageLocators.selectCategoryLocator).click();
     }
     async selectManufacturer() {
-        await this.page.locator("//img[@alt='Apple']").click();
-        await Promise.all([
-            this.page.waitForLoadState("networkidle")
-        ])
+        await this.page.locator(searchAndFillterProductPageLocators.selectManufacturerLocator).click();
+        await this.page.waitForLoadState("domcontentloaded")
     }
     async selectAvailability() {
-        const inStockCheckbox = this.page.locator("//label[contains(@for, 'mz-fss-0--1')]")
+        const inStockCheckbox = this.page.locator(searchAndFillterProductPageLocators.inStockLocator)
         expect(inStockCheckbox).not.toBeChecked();
         await inStockCheckbox.check();
         expect(inStockCheckbox).toBeChecked();
-        await Promise.all([
-            this.page.waitForLoadState("networkidle")
-        ])
+        await this.page.waitForLoadState("domcontentloaded")
     }
 }
